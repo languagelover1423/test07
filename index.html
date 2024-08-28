@@ -1,0 +1,144 @@
+<html>
+<head>
+    <base href="https://api.websim.ai/">
+    <title>Video Chat Hub - Connect with 10 Users</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Your existing CSS code */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Video Chat Hub - Connect with 10 Users</h1>
+        <input type="text" id="searchInput" placeholder="Search users by name, hobbies, or topics...">
+        <ul id="userList"></ul>
+    </div>
+
+    <script>
+        const users = [];
+        for (let i = 1; i <= 10; i++) {
+            users.push({
+                id: i,
+                name: `User${i}`,
+                availableUntil: '18:00',
+                hobbies: 'Reading, Cooking, Traveling',
+                topics: 'Technology, Science, Arts',
+                country: ''
+            });
+        }
+
+        function renderUsers() {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.className = 'user-item';
+                li.innerHTML = `
+                    <div class="user-header">
+                        <div class="user-name-container">
+                            <span class="user-name" id="name-${user.id}">${user.name}</span>
+                            <button class="edit-name-btn" onclick="editUserName(${user.id})">Edit</button>
+                        </div>
+                        <span class="status status-available">Available</span>
+                    </div>
+                    <div class="user-details">
+                        <label>Country:</label>
+                        <input type="text" id="country-${user.id}" value="${user.country}" onchange="updateCountry(${user.id}, this.value)">
+                    </div>
+                    <div class="user-details">
+                        <label>Available Until:</label>
+                        <div class="availability-container">
+                            <input type="time" id="availableUntil-${user.id}" value="${user.availableUntil}" onchange="updateAvailableUntil(${user.id}, this.value)">
+                        </div>
+                    </div>
+                    <div class="user-details">
+                        <label>Hobbies:</label>
+                        <input type="text" value="${user.hobbies}" readonly>
+                    </div>
+                    <div class="user-details">
+                        <label>Topics to Discuss:</label>
+                        <textarea readonly>${user.topics}</textarea>
+                    </div>
+                    <button class="call-btn" onclick="startGoogleMeetCall(${user.id})">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.01 15.38C18.78 15.38 17.59 15.18 16.48 14.82C16.13 14.7 15.74 14.79 15.47 15.06L13.9 17.03C11.07 15.68 8.42 13.13 7.01 10.2L8.96 8.54C9.23 8.26 9.31 7.87 9.2 7.52C8.83 6.41 8.64 5.22 8.64 3.99C8.64 3.45 8.19 3 7.65 3H4.19C3.65 3 3 3.24 3 3.99C3 13.28 10.73 21 20.01 21C20.72 21 21 20.37 21 19.82V16.37C21 15.83 20.55 15.38 20.01 15.38Z" fill="currentColor"/>
+                        </svg>
+                        Call
+                    </button>
+                `;
+                userList.appendChild(li);
+            });
+        }
+
+        function startGoogleMeetCall(userId) {
+            // Generate a random Google Meet link (for demo purposes)
+            const meetLink = `https://meet.google.com/new`; // This will generate a new Meet link
+
+            // Redirect the user to the Google Meet link
+            window.open(meetLink, '_blank');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredUsers = users.filter(user => 
+                user.name.toLowerCase().includes(searchTerm) ||
+                user.hobbies.toLowerCase().includes(searchTerm) ||
+                user.topics.toLowerCase().includes(searchTerm) ||
+                user.country.toLowerCase().includes(searchTerm) ||
+                user.availableUntil.toLowerCase().includes(searchTerm)
+            );
+
+            renderFilteredUsers(filteredUsers);
+        });
+
+        function renderFilteredUsers(filteredUsers) {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            filteredUsers.forEach(user => {
+                const li = document.createElement('li');
+                li.className = 'user-item';
+                li.innerHTML = `
+                    <div class="user-header">
+                        <div class="user-name-container">
+                            <span class="user-name" id="name-${user.id}">${user.name}</span>
+                            <button class="edit-name-btn" onclick="editUserName(${user.id})">Edit</button>
+                        </div>
+                        <span class="status status-available">Available</span>
+                    </div>
+                    <div class="user-details">
+                        <label>Country:</label>
+                        <input type="text" id="country-${user.id}" value="${user.country}" onchange="updateCountry(${user.id}, this.value)">
+                    </div>
+                    <div class="user-details">
+                        <label>Available Until:</label>
+                        <div class="availability-container">
+                            <input type="time" id="availableUntil-${user.id}" value="${user.availableUntil}" onchange="updateAvailableUntil(${user.id}, this.value)">
+                        </div>
+                    </div>
+                    <div class="user-details">
+                        <label>Hobbies:</label>
+                        <input type="text" value="${user.hobbies}" readonly>
+                    </div>
+                    <div class="user-details">
+                        <label>Topics to Discuss:</label>
+                        <textarea readonly>${user.topics}</textarea>
+                    </div>
+                    <button class="call-btn" onclick="startGoogleMeetCall(${user.id})">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.01 15.38C18.78 15.38 17.59 15.18 16.48 14.82C16.13 14.7 15.74 14.79 15.47 15.06L13.9 17.03C11.07 15.68 8.42 13.13 7.01 10.2L8.96 8.54C9.23 8.26 9.31 7.87 9.2 7.52C8.83 6.41 8.64 5.22 8.64 3.99C8.64 3.45 8.19 3 7.65 3H4.19C3.65 3 3 3.24 3 3.99C3 13.28 10.73 21 20.01 21C20.72 21 21 20.37 21 19.82V16.37C21 15.83 20.55 15.38 20.01 15.38Z" fill="currentColor"/>
+                        </svg>
+                        Call
+                    </button>
+                `;
+                userList.appendChild(li);
+            });
+        }
+
+        // Initial render
+        renderUsers();
+    </script>
+</body>
+</html>
